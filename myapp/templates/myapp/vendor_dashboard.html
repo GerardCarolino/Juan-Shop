@@ -1,0 +1,55 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Vendor Dashboard{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Vendor Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow">
+            <p class="text-gray-600">Total Products</p>
+            <p class="text-3xl font-bold">{{ total_products }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+            <p class="text-gray-600">Total Orders</p>
+            <p class="text-3xl font-bold">{{ total_orders }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+            <p class="text-gray-600">Revenue</p>
+            <p class="text-3xl font-bold">₱{{ total_revenue }}</p>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow mb-8">
+        <div class="flex justify-between items-center p-6 border-b">
+            <h2 class="text-2xl font-bold">My Products</h2>
+            <a href="{% url 'myapp:product_create' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Add Product</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left">Product</th>
+                        <th class="px-6 py-3 text-left">Price</th>
+                        <th class="px-6 py-3 text-left">Stock</th>
+                        <th class="px-6 py-3 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr class="border-b">
+                        <td class="px-6 py-4">{{ product.name }}</td>
+                        <td class="px-6 py-4">₱{{ product.price }}</td>
+                        <td class="px-6 py-4">{{ product.stock }}</td>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'myapp:product_edit' product.pk %}" class="text-blue-600 mr-2"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'myapp:product_delete' product.pk %}" class="text-red-600"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">No products yet</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

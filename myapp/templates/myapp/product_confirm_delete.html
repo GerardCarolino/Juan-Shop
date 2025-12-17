@@ -1,0 +1,15 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Delete Product{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="bg-white p-8 rounded-lg shadow">
+        <h1 class="text-2xl font-bold mb-6 text-red-600">Confirm Delete</h1>
+        <p class="mb-6">Are you sure you want to delete "{{ product.name }}"?</p>
+        <form method="POST" class="flex space-x-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">Delete</button>
+            <a href="{% url 'myapp:vendor_dashboard' %}" class="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

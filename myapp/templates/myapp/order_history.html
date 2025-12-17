@@ -1,0 +1,50 @@
+
+{% extends 'myapp/base.html' %}
+{% block title %}Order History{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Order History</h1>
+    
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        {% for order in orders %}
+        <div class="border-b p-6 hover:bg-gray-50">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="font-bold text-lg">Order #{{ order.order_number }}</h3>
+                    <p class="text-sm text-gray-600">{{ order.created_at|date:"F d, Y at h:i A" }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-xl text-blue-600">₱{{ order.total_amount }}</p>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
+                        {% if order.status == 'delivered' %}bg-green-100 text-green-800
+                        {% elif order.status == 'pending' %}bg-yellow-100 text-yellow-800
+                        {% elif order.status == 'cancelled' %}bg-red-100 text-red-800
+                        {% else %}bg-blue-100 text-blue-800{% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <p class="text-sm"><span class="font-semibold">Shipping Address:</span> {{ order.shipping_address }}</p>
+                <p class="text-sm"><span class="font-semibold">City:</span> {{ order.shipping_city }}, {{ order.shipping_zip }}</p>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{% url 'myapp:order_detail' order.id %}" class="text-blue-600 hover:text-blue-700 text-sm font-semibold">
+                    View Details <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="p-12 text-center">
+            <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
+            <p class="text-gray-500 text-lg mb-4">No orders yet</p>
+            <a href="{% url 'myapp:product_list' %}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                Start Shopping
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

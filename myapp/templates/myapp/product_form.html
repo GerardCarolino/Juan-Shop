@@ -1,0 +1,17 @@
+{% extends 'myapp/base.html' %}
+{% block title %}{{ action }} Product{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">{{ action }} Product</h1>
+    <form method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-lg shadow space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">{{ action }} Product</button>
+    </form>
+</div>
+<style>
+    form p { margin-bottom: 1rem; }
+    form label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+    form input, form select, form textarea { width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.375rem; }
+</style>
+{% endblock %}

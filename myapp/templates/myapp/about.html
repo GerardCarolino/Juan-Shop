@@ -1,0 +1,148 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="about-hero">
+        <h1>About Us</h1>
+        <p class="subtitle">Learn more about our Django project</p>
+    </section>
+
+    <section class="about-content">
+        <div class="about-card">
+            <h2>Our Mission</h2>
+            <p>We are dedicated to building modern web applications using Django and cutting-edge technologies. Our goal is to create user-friendly, scalable, and secure web solutions.</p>
+        </div>
+
+        <div class="about-card">
+            <h2>What We Do</h2>
+            <p>We specialize in full-stack web development, combining Django's powerful backend capabilities with modern frontend technologies like HTML5, CSS3, and JavaScript.</p>
+        </div>
+
+        <div class="about-card">
+            <h2>Our Technology Stack</h2>
+            <ul class="tech-list">
+                <li>Django - Python Web Framework</li>
+                <li>HTML5, CSS3, JavaScript</li>
+                <li>SQLite / PostgreSQL Database</li>
+                <li>RESTful API Development</li>
+            </ul>
+        </div>
+
+        <div class="about-card">
+            <h2>Get In Touch</h2>
+            <p>Have questions or want to work with us? Feel free to reach out!</p>
+            <button class="btn" id="contactBtn">Contact Us</button>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-hero {
+        text-align: center;
+        padding: 3rem 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 3rem;
+    }
+
+    .about-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .about-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem 0;
+    }
+
+    .about-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .about-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .about-card h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .about-card p {
+        color: #555;
+        line-height: 1.8;
+    }
+
+    .tech-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .tech-list li {
+        padding: 0.5rem 0;
+        color: #555;
+        border-bottom: 1px solid #eee;
+    }
+
+    .tech-list li:last-child {
+        border-bottom: none;
+    }
+
+    .tech-list li:before {
+        content: "✓ ";
+        color: #4CAF50;
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('contactBtn').addEventListener('click', function() {
+        alert('Thank you for your interest! Contact form coming soon.');
+    });
+
+    // Add fade-in animation to cards
+    const cards = document.querySelectorAll('.about-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.animation = `fadeIn 0.5s ease-in-out ${index * 0.1}s forwards`;
+    });
+
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

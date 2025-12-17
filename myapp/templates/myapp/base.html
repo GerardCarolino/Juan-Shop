@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Juan-Shop{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Dark mode styles */
+        .dark body { background-color: #1a1a1a; color: #e5e5e5; }
+        .dark .bg-white { background-color: #2d2d2d !important; }
+        .dark .bg-gray-50 { background-color: #1a1a1a !important; }
+        .dark .bg-gray-100 { background-color: #2d2d2d !important; }
+        .dark .text-gray-700 { color: #d1d1d1 !important; }
+        .dark .text-gray-600 { color: #a0a0a0 !important; }
+        .dark .text-gray-800 { color: #e5e5e5 !important; }
+        .dark .text-gray-900 { color: #ffffff !important; }
+        .dark .border-gray-300 { border-color: #404040 !important; }
+        .dark .border-gray-200 { border-color: #404040 !important; }
+        .dark input, .dark select, .dark textarea { 
+            background-color: #1a1a1a !important; 
+            border-color: #404040 !important;
+            color: #e5e5e5 !important;
+        }
+        .dark .shadow { box-shadow: 0 1px 3px 0 rgba(255, 255, 255, 0.1) !important; }
+        .dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1) !important; }
+        
+        /* Dropdown fix */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        
+        /* Password toggle */
+        .password-toggle {
+            position: relative;
+        }
+        .password-toggle-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6B7280;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{% url 'myapp:home' %}" class="flex items-center">
+                        <i class="fas fa-microchip text-blue-600 text-2xl mr-2"></i>
+                        <span class="text-2xl font-bold text-gray-800">Juan-Shop</span>
+                    </a>
+                    <div class="hidden md:flex ml-10 space-x-8">
+                        <a href="{% url 'myapp:home' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">Home</a>
+                        <a href="{% url 'myapp:product_list' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">Products</a>
+                        {% if user.is_authenticated and user.user_type == 'vendor' %}
+                        <a href="{% url 'myapp:vendor_dashboard' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition">Vendor Dashboard</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="text-gray-700 hover:text-blue-600 p-2">
+                        <i class="fas fa-moon dark-icon" id="theme-icon"></i>
+                    </button>
+                    
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'myapp:cart' %}" class="text-gray-700 hover:text-blue-600 relative">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                        </a>
+                        
+                        <!-- Fixed Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-user-circle text-2xl"></i>
+                                <span class="hidden md:block">{{ user.username }}</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
+                                <a href="{% url 'myapp:profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2"></i>Profile</a>
+                                {% if user.user_type == 'buyer' %}
+                                <a href="{% url 'myapp:buyer_dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-dashboard mr-2"></i>Dashboard</a>
+                                <a href="{% url 'myapp:order_history' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-history mr-2"></i>Orders</a>
+                                {% endif %}
+                                <a href="{% url 'myapp:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'myapp:login' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Login</a>
+                        <a href="{% url 'myapp:register' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% for message in messages %}
+        <div class="bg-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-100 border border-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-400 text-{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}blue{% endif %}-700 px-4 py-3 rounded relative mb-4 animate-slide-in">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="absolute top-0 bottom-0 right-0 px-4 py-3"><i class="fas fa-times"></i></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <main class="min-h-screen">{% block content %}{% endblock %}</main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4"><i class="fas fa-microchip mr-2"></i>TechParts</h3>
+                    <p class="text-gray-400">Your trusted source for computer parts and accessories.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'myapp:home' %}" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="{% url 'myapp:product_list' %}" class="text-gray-400 hover:text-white">Products</a></li>
+                        <li><a href="{% url 'myapp:vendor_register' %}" class="text-gray-400 hover:text-white">Become a Vendor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Processors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Graphics Cards</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Motherboards</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Juan-Shop. All rights reserved. Made for computer enthusiasts.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+        
+        // Password Toggle Functions
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in {
+            animation: slide-in 0.3s ease-out;
+        }
+    </style>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

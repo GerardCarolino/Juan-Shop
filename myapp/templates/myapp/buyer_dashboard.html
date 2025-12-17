@@ -1,0 +1,38 @@
+{% extends 'myapp/base.html' %}
+{% block title %}My Dashboard{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">My Dashboard</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <a href="{% url 'myapp:cart' %}" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+            <i class="fas fa-shopping-cart text-4xl text-blue-600 mb-4"></i>
+            <h2 class="text-xl font-bold">Shopping Cart</h2>
+            <p class="text-gray-600">View your cart items</p>
+        </a>
+        <a href="{% url 'myapp:order_history' %}" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+            <i class="fas fa-history text-4xl text-green-600 mb-4"></i>
+            <h2 class="text-xl font-bold">Order History</h2>
+            <p class="text-gray-600">View your past orders</p>
+        </a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-2xl font-bold mb-6">Recent Orders</h2>
+        {% for order in recent_orders %}
+        <div class="border-b py-4 flex justify-between items-center">
+            <div>
+                <p class="font-bold">Order #{{ order.order_number }}</p>
+                <p class="text-sm text-gray-600">{{ order.created_at|date:"M d, Y" }}</p>
+            </div>
+            <div class="text-right">
+                <p class="font-bold text-blue-600">₱{{ order.total_amount }}</p>
+                <p class="text-sm text-gray-600">{{ order.get_status_display }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-gray-500 text-center py-8">No orders yet. <a href="{% url 'myapp:product_list' %}" class="text-blue-600">Start shopping!</a></p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

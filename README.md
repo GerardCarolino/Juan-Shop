@@ -1,4 +1,4 @@
-# TechParts E-commerce Platform
+# Juan-Shop E-commerce Platform
 
 A full-featured e-commerce platform for buying and selling computer parts, built with Django.
 

@@ -20,6 +20,12 @@ A full-featured e-commerce platform for buying and selling computer parts, built
 - **Database**: SQLite (development), PostgreSQL-ready (production)
 - **Image Processing**: Pillow
 
+## 📋 Members
+- Leander Misagal (Frontend)
+- Jhon Rey Pigar (Backend)
+- Mark Gerard Sicadsicad (Full-Stack & DevOps)
+
+
 ## 📋 Requirements
 
 - Python 3.8 or higher
